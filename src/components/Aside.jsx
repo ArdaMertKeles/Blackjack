@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
-export default function Aside({ chip1, chip5, chip25, chip50, chip100, play, betAmount, setBetAmount, balance, setBalance }) {
+export default function Aside({ betBtn, setBetBtn, chip1, chip5, chip25, chip50, chip100, play, betAmount, setBetAmount, balance, setBalance, message }) {
 
     const [addToAmount, setAddToAmount] = useState(0)
-    const [betBtn, setBetBtn] = useState(false)
 
     function setAmount(amount) {
         setAddToAmount(amount)
@@ -30,6 +29,7 @@ export default function Aside({ chip1, chip5, chip25, chip50, chip100, play, bet
     return (
         <div className='aside'>
             <div className='balance'>Balance: ${balance}</div>
+            <div className="message">{message}</div>
             <div className="betContainer">
                 <p className="totalBet">Total Bet: ${betAmount}</p>
                 <p className="amountToAdd">Amount to add: ${addToAmount}</p>

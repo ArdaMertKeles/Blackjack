@@ -1,17 +1,12 @@
 import React from "react";
 
-export default function Buttons({drawCard, playBtns, setPass}){
-
-    function passBtn(){
-        setPass(true)
-    }
+export default function Buttons({hit, playBtns, standBtn, doubleBtn, playerTotal}){
 
     return(
         <div className="buttonsWrapper">
-            <button disabled={playBtns} onClick={() => passBtn()} className="passBtn">Pass</button>
-            <button disabled={playBtns} onClick={drawCard} className="drawBtn">Draw Card</button>
-            <button disabled={playBtns} className="doubleBtn">Double</button>
-            <button disabled={playBtns} className="splitBtn">Split</button>
+            <button onClick={standBtn} disabled={playBtns || playerTotal >= 21} className="passBtn">Stand</button>
+            <button onClick={hit} disabled={playBtns || playerTotal >= 21} className="drawBtn">Hit</button>
+            <button disabled={playBtns} onClick={doubleBtn} className="doubleBtn">Double</button>
         </div>
     )
 }

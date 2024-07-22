@@ -11,6 +11,19 @@
         transform-origin: center;
     }
 }
+@keyframes cardOut{
+    0%{
+        transform: translate(0,0);
+        opacity: 1;
+    }
+    25%{
+        opacity: 1;
+    }
+    100%{
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
 @keyframes chipsBetting{
     0%{
         transform: translateY(-100px);
@@ -19,8 +32,27 @@
         transform: translateY(0);
     }
 }
+@keyframes tracking-in-expand {
+    0% {
+      letter-spacing: -0.5em;
+      opacity: 0;
+    }
+    40% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
 .card{
     animation: cardShowing 1s ease;
+}
+.cardOut{
+    height: 90px;
+    width: 60px;
+    margin-left: -25px;
+    animation: cardOut 0.5s ease;
 }
 .wrapper{
     display: flex;
@@ -138,15 +170,7 @@
                     background: rgb(191, 162, 2);
                     transition: 0.5s ease;
                 }
-                .splitBtn{
-                    background: blueviolet;
-                    transition: 0.5s ease;
-                }
-                .splitBtn:hover{
-                    background: rgb(96, 30, 158);
-                    transition: 0.5s ease;
-                }
-                .passBtn:disabled, .drawBtn:disabled, .doubleBtn:disabled, .splitBtn:disabled{
+                .passBtn:disabled, .drawBtn:disabled, .doubleBtn:disabled{
                     cursor: not-allowed;
                 }
             }
@@ -159,6 +183,11 @@
         justify-content: space-between;
         align-items: center;
         background: beige;
+        .message{
+            font-size: 1.85em;
+            font-weight: 700;
+            animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+        }
         .balance{
             font-size: 1.5em;
             border: 1px solid gray;

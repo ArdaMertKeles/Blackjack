@@ -326,19 +326,20 @@ function App() {
       img: 'https://www.deckofcardsapi.com/static/img/JH.png'
     }
   ]
-  const [shuffledCards, setShuffledCards] = useState([])
-  const [playerCards, setPlayerCards] = useState([])
-  const [courpierCards, setCourpierCards] = useState([])
-  const [playerTotalValue, setPlayerTotalValue] = useState()
-  const [courpierTotalValue, setCourpierTotalValue] = useState()
+  const [deck, setDeck] = useState([]);
+  const [playerHand, setPlayerHand] = useState([]);
+  const [dealerHand, setDealerHand] = useState([]);
+  const [playerTotal, setPlayerTotal] = useState(0);
+  const [dealerTotal, setDealerTotal] = useState(0);
+  const [message, setMessage] = useState('');
   const [playBtns, setPlayBtns] = useState(true)
   const [betAmount, setBetAmount] = useState(0)
   const [balance, setBalance] = useState(250)
-  const [pass, setPass] = useState(false)
-
+  const [betBtn, setBetBtn] = useState(false)
+  const [cardClass, setCardClass] = useState('card')
 
   // Shuffling Cards function
-  function shuffleCards(array) {
+  function shuffleDeck(array) {
     let shuffledCards = array.slice();
     for (let i = shuffledCards.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -347,115 +348,177 @@ function App() {
     return shuffledCards;
   }
   useEffect(() => {
-    setShuffledCards(shuffleCards(cards))
-    console.log(shuffledCards)
-  }, [])
+    setDeck(shuffleDeck(cards));
+  }, []);
 
   // Adding cards to players hand
-  const addToPlayerHandTwice = () => {
-    if (shuffledCards.length >= 2) {
-        const movedCards = shuffledCards.splice(0, 2);
-        setShuffledCards([...shuffledCards]);
-        setPlayerCards([...playerCards, ...movedCards]);
+  const calculateTotal = (hand) => {
+    let total = 0;
+    let aces = 0;
+    hand.forEach(card => {
+      if (card.value === 1) {
+        aces += 1;
+        total += 11;
+      } else {
+        total += card.value;
+      }
+    });
+    while (total > 21 && aces) {
+      total -= 10;
+      aces -= 1;
     }
-};
-  const addToPlayerHand = () => {
-    if (shuffledCards.length > 0) {
-      const [movedCard] = shuffledCards.splice(0, 1);
-      setShuffledCards([...shuffledCards]);
-      setPlayerCards([...playerCards, movedCard]);
+    return total;
+  };
+
+  const dealInitialHands = () => {
+    let newDeck = [...deck];
+    const playerHand = [newDeck.pop(), newDeck.pop()];
+    const dealerHand = [newDeck.pop()];
+    setDeck(newDeck);
+    setPlayerHand(playerHand);
+    setDealerHand(dealerHand);
+    setPlayerTotal(calculateTotal(playerHand));
+    setDealerTotal(calculateTotal(dealerHand));
+    setMessage('');
+    setPlayBtns(false)
+  };
+
+  const hit = () => {
+    let newDeck = [...deck];
+    const newCard = newDeck.pop();
+    const newPlayerHand = [...playerHand, newCard];
+    const newTotal = calculateTotal(newPlayerHand);
+    setDeck(newDeck);
+    setPlayerHand(newPlayerHand);
+    setPlayerTotal(newTotal);
+    if (newTotal > 21) {
+      setMessage('You busted!');
+      setPlayBtns(true)
+      setTimeout(() => {
+        setCardClass('cardOut')
+      }, 1000);
+      setTimeout(() => {
+        setCardClass('card')
+        setPlayerHand([])
+        setPlayerTotal(0)
+        setDealerHand([])
+        setDealerTotal(0)
+        setBetBtn(false)
+      }, 1500);
     }
   };
-  const addToCourpierHand = () => {
-    if (shuffleCards.length > 0) {
-      const [movedCard] = shuffledCards.splice(0, 1);
-      setShuffledCards([...shuffledCards]);
-      setCourpierCards([...courpierCards, movedCard])
+
+  const stand = () => {
+    let newDeck = [...deck];
+    let newDealerHand = [...dealerHand];
+    let newTotal = dealerTotal;
+    while (newTotal < 17) {
+      const newCard = newDeck.pop();
+      newDealerHand = [...newDealerHand, newCard];
+      newTotal = calculateTotal(newDealerHand);
+    }
+    setDeck(newDeck);
+    setDealerHand(newDealerHand);
+    setDealerTotal(newTotal);
+    if (newTotal > 21 || newTotal < playerTotal) {
+      setMessage('You win!');
+      setBalance(prev => prev + betAmount * 2)
+      setTimeout(() => {
+        setCardClass('cardOut')
+      }, 1000);
+    } else if (newTotal === playerTotal) {
+      setMessage('Draw!');
+      setBalance(prev => prev + betAmount)
+      setTimeout(() => {
+        setCardClass('cardOut')
+      }, 1000);
+    } else {
+      setMessage('Dealer wins!');
+      setTimeout(() => {
+        setCardClass('cardOut')
+      }, 1000);
+    }
+    setPlayBtns(true)
+    setTimeout(() => {
+      setCardClass('card')
+      setPlayerHand([])
+      setPlayerTotal(0)
+      setDealerHand([])
+      setDealerTotal(0)
+      setBetBtn(false)
+    }, 1500);
+  };
+
+  const double = () => {
+    if (balance > betAmount) {
+      let newDeck = [...deck];
+      const newCard = newDeck.pop();
+      const newPlayerHand = [...playerHand, newCard];
+      const newTotal = calculateTotal(newPlayerHand);
+      setDeck(newDeck);
+      setPlayerHand(newPlayerHand);
+      setPlayerTotal(newTotal);
+      setBalance(prev => prev - betAmount)
+      if (newTotal > 21) {
+        setMessage('You busted!');
+        setTimeout(() => {
+          setCardClass('cardOut')
+        }, 1000);
+        setPlayBtns(true)
+        setTimeout(() => {
+          setCardClass('card')
+          setPlayerHand([])
+          setPlayerTotal(0)
+          setDealerHand([])
+          setDealerTotal(0)
+          setBetBtn(false)
+        }, 1500);
+      } else {
+        stand()
+      }
     }
   }
-
-  // Making Ace card dynamic by 11 or 1 depends on total value
-  const calculateDynamicValue = (card, currentTotal) => {
-    if (['AC', 'AS', 'AD', 'AH'].includes(card.code)) {
-      return currentTotal + 11 <= 21 ? 11 : 1;
-    }
-    return card.value;
-  };
 
   useEffect(() => {
-    const playerTotalValue = playerCards.reduce((sum, card) => sum + card.value, 0);
-    const courpierTotalValue = courpierCards.reduce((sum, card) => sum + card.value, 0);
-
-    setPlayerTotalValue(playerTotalValue)
-    setCourpierTotalValue(courpierTotalValue)
-  }, [cards, addToCourpierHand, addToPlayerHand])
-
-  function drawCard() {
-    if (playerTotalValue < 21) {
-      addToPlayerHand()
+    if (playerTotal === 21) {
+      setBalance(prev => prev + betAmount * 3)
     }
-  }
-
-  function play(){
-    addToCourpierHand()
-    setTimeout(() => {
-      addToPlayerHandTwice()
-      setPlayBtns(false)
-    }, 750);
-  }
-
-  // Game
-
-  const drawCardsForCroupier = () => {
-    if (16 >= courpierTotalValue) {
-        addToCourpierHand();
-        setTimeout(() => {
-            drawCardsForCroupier();
-        }, 500);
-    }else(console.log('sa'))
-};
-
-useEffect(() => {
-  if (courpierTotalValue > 21) {
-      setBalance(prev => prev + betAmount * 2);
-  } else if (playerTotalValue > 21) {
-      console.log('You lost');
-  } else if (pass && courpierTotalValue < 17) {
-      drawCardsForCroupier();
-  }
-}, [play, pass, courpierTotalValue, playerTotalValue]);
+    if (dealerTotal > 21) {
+      setBalance(prev => prev + betAmount * 2)
+    }
+  }, [playerTotal])
 
   return (
     <div className="wrapper">
-      <div style={{backgroundImage: `url(${casinoBackground})`}} className='leftWrapper'>
+      <div style={{ backgroundImage: `url(${casinoBackground})` }} className='leftWrapper'>
         <div className='mainContainer'>
           <img className='courpier' src={croupier} alt="" />
           <div className="tableWrapper">
             <div className="outline">
               <div className="table">
                 <div className='courpierSide'>
-                  <div className='total'>{courpierTotalValue}</div>
+                  <div className='total'>{dealerTotal}</div>
                   <div className='cards'>
-                    {courpierCards.map((card, key) => (
-                      <img className='card' src={card.img} key={key} />
+                    {dealerHand.map((card, key) => (
+                      <img className={cardClass} src={card.img} key={key} />
                     ))}
                   </div>
                 </div>
                 <div className='playerSide'>
-                    <div className='total'>{playerTotalValue}</div>
-                    <div className='cards'>
-                      {playerCards.map((card, key) => (
-                        <img className='card' src={card.img} key={key} />
-                      ))}
-                    </div>
+                  <div className='total'>{playerTotal}</div>
+                  <div className='cards'>
+                    {playerHand.map((card, key) => (
+                      <img className={cardClass} src={card.img} key={key} />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <Buttons setPass={setPass} playBtns={playBtns} drawCard={drawCard} />
+          <Buttons doubleBtn={double} standBtn={stand} playBtns={playBtns} hit={hit} playerTotal={playerTotal} />
         </div>
       </div>
-      <Aside play={play} chip1={chip1} chip5={chip5} chip25={chip25} chip50={chip50} chip100={chip100} betAmount={betAmount} setBetAmount={setBetAmount} balance={balance} setBalance={setBalance} />
+      <Aside betBtn={betBtn} setBetBtn={setBetBtn} message={message} play={dealInitialHands} chip1={chip1} chip5={chip5} chip25={chip25} chip50={chip50} chip100={chip100} betAmount={betAmount} setBetAmount={setBetAmount} balance={balance} setBalance={setBalance} />
     </div>
   );
 }
