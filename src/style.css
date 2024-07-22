@@ -1,0 +1,252 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+@keyframes cardShowing{
+    0%{
+        transform: translate(200px, -150px) rotateZ(60deg);   
+    }
+    100%{
+        transform: translate(0,0) rotateZ(0deg);
+        transform-origin: center;
+    }
+}
+@keyframes chipsBetting{
+    0%{
+        transform: translateY(-100px);
+    }
+    100%{
+        transform: translateY(0);
+    }
+}
+.card{
+    animation: cardShowing 1s ease;
+}
+.wrapper{
+    display: flex;
+    justify-content: flex-end;
+    height: 100vh;
+    width: 100vw;
+    .leftWrapper{
+        width: 90%;
+        display: flex;
+        align-self: flex-start;
+        justify-content: center;
+        background-position: center;
+        background-size: cover;
+        height: 100%;
+        .mainContainer{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            .courpier{
+                width: 225px;
+            }
+            .tableWrapper{
+                margin-top: -12px;
+                background: rgb(50, 50, 50);
+                border-radius: 31%;
+                width: 1100px;
+                height: 450px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                .outline{
+                    background: rgb(160, 160, 113);
+                    border-radius: 31%;
+                    width: 1075px;
+                    height: 425px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    .table{
+                        background-color: #0d311b;
+                        background: radial-gradient(circle, transparent 20%, #0d311b 20%, #0d311b 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #0d311b 20%, #0d311b 80%, transparent 80%, transparent) 20px 20px, linear-gradient(#0e572c 1.6px, transparent 1.6px) 0 -0.8px, linear-gradient(90deg, #0e572c 1.6px, #0d311b 1.6px) -0.8px 0;
+                        background-size: 40px 40px, 40px 40px, 20px 20px, 20px 20px;
+                        border-radius: 31%;
+                        width: 1025px;
+                        height: 400px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-around;
+                        align-items: center;
+                        position: relative;
+                        .courpierSide{
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            gap: 15px;
+                        }
+                        .playerSide{
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            gap: 15px;
+                        }
+                        .total{
+                            background: lightslategray;
+                            font-size: 1.2em;
+                            border-radius: 10px;
+                            width: 60px;
+                            text-align: center;
+                        }
+                        .card{
+                            height: 90px;
+                            width: 60px;
+                            margin-left: -25px;
+                        }
+                    }
+                }
+            }
+            .buttonsWrapper{
+                display: flex;
+                gap: 30px;
+                margin-top: 1.5em;
+                button{
+                    width: 125px;
+                    height: 50px;
+                    border-radius: 10px;
+                    font-size: 1em;
+                    font-weight: 600;
+                    cursor: pointer;
+                }
+                .passBtn{
+                    background: rgb(252, 50, 50);
+                    color: #ffffff;
+                    transition: 0.5s ease;
+                }
+                .passBtn:hover{
+                    background: rgb(195, 39, 39);
+                    transition: 0.5s ease;
+                }
+                .drawBtn{
+                    background: rgb(58, 235, 58);
+                    color: #022d0d;
+                    transition: 0.5s ease;
+                }
+                .drawBtn:hover{
+                    background: rgb(43, 176, 43);
+                    transition: 0.5s ease;
+                }
+                .doubleBtn{
+                    background: gold;
+                    transition: 0.5s ease;
+                }
+                .doubleBtn:hover{
+                    background: rgb(191, 162, 2);
+                    transition: 0.5s ease;
+                }
+                .splitBtn{
+                    background: blueviolet;
+                    transition: 0.5s ease;
+                }
+                .splitBtn:hover{
+                    background: rgb(96, 30, 158);
+                    transition: 0.5s ease;
+                }
+                .passBtn:disabled, .drawBtn:disabled, .doubleBtn:disabled, .splitBtn:disabled{
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+    .aside{
+        width: 20%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        background: beige;
+        .balance{
+            font-size: 1.5em;
+            border: 1px solid gray;
+            margin-top: 1em;
+            border-radius: 10px;
+            padding: 10px 20px 10px 20px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+        .betContainer{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+            background: lightcoral;
+            margin-bottom: 2em;
+            border-radius: 16px;
+            padding: 5px;
+            padding-bottom: 1em;
+            .totalBet{
+                font-size: 1.35em;
+            }
+            .chips{
+                display: flex;
+                img{
+                    cursor: pointer;
+                    width: 50px;
+                }
+            }
+            .buttons{
+                display: flex;
+                gap: 1.25em;
+                button{
+                    width: 75px;
+                    height: 35px;
+                    border-radius: 10px;
+                    font-weight: 600;
+                    cursor: pointer;
+                }
+                .removeBtn{
+                    background: rgb(252, 50, 50);
+                    transition: 0.5s ease;
+                }
+                .removeBtn:hover{
+                    background: rgb(195, 39, 39);
+                    transition: 0.5s ease;
+                }
+                .addBtn{
+                    background: rgb(58, 235, 58);
+                    color: #022d0d;
+                    transition: 0.5s ease;
+                }
+                .addBtn:hover{
+                    background: rgb(43, 176, 43);
+                    transition: 0.5s ease;
+                }
+            }
+            .removeBtn:disabled, .addBtn:disabled, .betBtn:disabled{
+                cursor: not-allowed;
+            }
+            .betBtn{
+                padding: 17px 40px;
+                border-radius: 50px;
+                cursor: pointer;
+                border: 0;
+                background-color: rgb(221, 236, 190);
+                box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                font-size: 15px;
+                transition: all 0.5s ease;
+              }
+              
+            .betBtn:hover {
+                letter-spacing: 3px;
+                background-color: hsl(261deg 80% 48%);
+                color: hsl(0, 0%, 100%);
+                box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+              }
+              
+            .betBtn:active {
+                letter-spacing: 3px;
+                background-color: hsl(261deg 80% 48%);
+                color: hsl(0, 0%, 100%);
+                box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+                transform: translateY(10px);
+                transition: 100ms;
+              }
+              
+        }
+    }
+}
