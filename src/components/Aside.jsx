@@ -21,9 +21,11 @@ export default function Aside({ betBtn, setBetBtn, chip1, chip5, chip25, chip50,
     }
 
     function bet() {
-        setBalance(prev => prev - betAmount);
-        play();
-        setBetBtn(true)
+        if(balance >= betAmount){
+            setBalance(prev => prev - betAmount);
+            play();
+            setBetBtn(true)
+        }
     }
 
     return (

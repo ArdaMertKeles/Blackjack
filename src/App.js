@@ -351,7 +351,7 @@ function App() {
     setDeck(shuffleDeck(cards));
   }, []);
 
-  // Adding cards to players hand
+  
   const calculateTotal = (hand) => {
     let total = 0;
     let aces = 0;
@@ -381,6 +381,23 @@ function App() {
     setDealerTotal(calculateTotal(dealerHand));
     setMessage('');
     setPlayBtns(false)
+    const newTotal = calculateTotal(playerHand)
+    if(newTotal === 21){
+      setMessage('Blackjack!');
+      setPlayBtns(true)
+      setBalance(prev => prev + betAmount * 3)
+      setTimeout(() => {
+        setCardClass('cardOut')
+      }, 1000); 
+      setTimeout(() => {
+        setCardClass('card')
+        setPlayerHand([])
+        setPlayerTotal(0)
+        setDealerHand([])
+        setDealerTotal(0)
+        setBetBtn(false)
+      }, 1500);
+    }
   };
 
   const hit = () => {
