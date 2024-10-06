@@ -1,10 +1,6 @@
-# Getting Started with Create React App
+# This is a blackjack card game made with React.js [Live Server](https://mineblackjack.netlify.app/)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
+![Ekran görüntüsü 2024-10-06 180811](https://github.com/user-attachments/assets/9dda1b07-5587-46dc-9b72-658ce0e99aca)
 
 ### `npm start`
 
@@ -13,11 +9,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
